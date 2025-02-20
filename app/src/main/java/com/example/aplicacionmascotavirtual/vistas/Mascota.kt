@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,6 +26,8 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -37,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -57,6 +61,8 @@ import com.example.aplicacionmascotavirtual.viewmodel.MascotaViewModel
 import kotlinx.coroutines.delay
 
 import com.example.aplicacionmascotavirtual.componentes.LogrosComponent
+import com.example.aplicacionmascotavirtual.componentes.busquedaBinaria
+import com.example.aplicacionmascotavirtual.componentes.obtenerListaOrdenadaDeNecesidades
 import com.example.aplicacionmascotavirtual.models.Achievement
 import com.example.aplicacionmascotavirtual.vistas.DarAmorButton
 
@@ -73,6 +79,15 @@ fun MascotaScreen(navController: NavController, context: Context) {
 
     var nivelAlimentacion by remember { mutableStateOf(0f) }
 
+    // Historial de interacciones implementado de forma local
+    val historialInteracciones = remember { mutableStateListOf<String>() }
+    var mostrarHistorial by remember { mutableStateOf(false) }
+    var textoBusqueda by remember { mutableStateOf("") }
+    var busquedaResultado by remember { mutableStateOf("") }
+
+    val necesidadesOrdenadas = remember(mascotaSeleccionada) {
+        mascotaSeleccionada?.let { obtenerListaOrdenadaDeNecesidades(it) } ?: listOf()
+    }
     // Efecto para seleccionar la primera mascota si no hay ninguna seleccionada
     LaunchedEffect(mascotas) {
         if (mascotaSeleccionada == null && mascotas.isNotEmpty()) {
@@ -134,6 +149,10 @@ fun MascotaScreen(navController: NavController, context: Context) {
                                 contentDescription = "Logros"
                             )
                         }
+                        Button(onClick = { mostrarHistorial = !mostrarHistorial }) {
+                            Icon(Icons.Default.Add, contentDescription = "Historial")
+                            Text("Historial")
+                        }
                         Box {
                             var expandido by remember { mutableStateOf(false) }
                             Button(onClick = { expandido = true }) {
@@ -174,16 +193,10 @@ fun MascotaScreen(navController: NavController, context: Context) {
                         DarAmorButton(context = context)
 
                         // Estadísticas
-                        Text(
-                            "Nivel de Hambre: ${mascota.hambre}%",
-                            color = Color.White,
-                            fontSize = 18.sp
-                        )
-                        Text(
-                            "Nivel de Felicidad: ${mascota.felicidad}%",
-                            color = Color.White,
-                            fontSize = 18.sp
-                        )
+                        Text("Estado de Necesidades:", fontSize = 20.sp, color = Color.White)
+                        necesidadesOrdenadas.forEach { (necesidad, cantidad) ->
+                            Text("$necesidad: $cantidad%", fontSize = 18.sp, color = Color.White)
+                        }
 
                         Spacer(modifier = Modifier.height(32.dp))
 
@@ -275,6 +288,7 @@ fun MascotaScreen(navController: NavController, context: Context) {
                             IconButton(
                                 onClick = {
                                     mascotaViewModel.alimentarMascota(mascota)
+                                    historialInteracciones.add("Alimentó a la mascota")
                                     if (nivelAlimentacion < 1f) {
                                         nivelAlimentacion =
                                             (nivelAlimentacion + 0.1f).coerceAtMost(1f)
@@ -294,9 +308,28 @@ fun MascotaScreen(navController: NavController, context: Context) {
 
                             Spacer(modifier = Modifier.width(16.dp))
 
-                            Button(onClick = { mascotaViewModel.jugarConMascota(mascota) }) {
+                            Button(onClick = {
+                                mascotaViewModel.jugarConMascota(mascota)
+                                historialInteracciones.add("Jugó con la mascota")
+                            }) {
                                 Text("Jugar", fontSize = 16.sp)
                             }
+                        }
+                        if (mostrarHistorial) {
+                            HistorialInteraccionesComponent(
+                                historial = historialInteracciones,
+                                textoBusqueda = textoBusqueda,
+                                onTextoBusquedaChange = { textoBusqueda = it },
+                                busquedaResultado = busquedaResultado,
+                                onBuscar = {
+                                    val index = busquedaBinaria(
+                                        historialInteracciones.sorted(),
+                                        textoBusqueda
+                                    )
+                                    busquedaResultado =
+                                        if (index != -1) "Interacción encontrada: $textoBusqueda" else "No se encontró la interacción"
+                                }
+                            )
                         }
 
 // Barra de progreso
@@ -385,7 +418,48 @@ fun MascotaScreen(navController: NavController, context: Context) {
 
     Spacer(modifier = Modifier.height(16.dp))
 
-
+    if (mostrarHistorial) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.4f)), // Fondo semitransparente
+            contentAlignment = Alignment.Center
+        ) {
+            Card(
+                modifier = Modifier
+                    .width(300.dp)
+                    .heightIn(min = 200.dp),
+                elevation = CardDefaults.cardElevation(8.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Historial de Interacciones",
+                        fontSize = 20.sp,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    // Mostrar cada mensaje en la lista de historial
+                    historialInteracciones.forEach { mensaje ->
+                        Text(
+                            text = mensaje,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    // Botón para cerrar la Card
+                    Button(
+                        onClick = { mostrarHistorial = false },
+                        modifier = Modifier.align(Alignment.End)
+                    ) {
+                        Text("Cerrar")
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -403,3 +477,4 @@ fun DialogButton(
         Text(texto)
     }
 }
+

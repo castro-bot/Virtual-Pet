@@ -33,12 +33,6 @@ fun EspacioV(i: Int){
 }
 
 @Composable
-fun EspacioH(i: Int){
-    Spacer(modifier = Modifier.width(i.dp))
-}
-
-
-@Composable
 fun BackgroundImage() {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -52,7 +46,6 @@ fun BackgroundImage() {
         )
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,6 +91,4 @@ fun IngresarContrasenia(
         ),
         visualTransformation = PasswordVisualTransformation()
     )
-
-
 }
