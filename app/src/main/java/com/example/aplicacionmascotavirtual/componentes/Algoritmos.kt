@@ -2,7 +2,6 @@ package com.example.aplicacionmascotavirtual.componentes
 
 import com.example.aplicacionmascotavirtual.models.Mascota
 
-
 fun busquedaBinaria(historial: List<String>, objetivo: String): Int {
     var inicio = 0
     var fin = historial.size - 1

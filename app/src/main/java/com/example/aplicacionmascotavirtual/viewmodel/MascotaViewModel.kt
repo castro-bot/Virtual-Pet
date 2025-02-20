@@ -256,5 +256,5 @@ class MascotaViewModel(application: Application) : AndroidViewModel(application)
         )
     }
 
-        fun getAchievementManager() = achievementManager
+    fun getAchievementManager() = achievementManager
 }
