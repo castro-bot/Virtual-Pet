@@ -34,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -150,8 +151,7 @@ fun MascotaScreen(navController: NavController, context: Context) {
                             )
                         }
                         Button(onClick = { mostrarHistorial = !mostrarHistorial }) {
-                            Icon(Icons.Default.Add, contentDescription = "Historial")
-                            Text("Historial")
+                            Icon(Icons.Default.List, contentDescription = "Historial")
                         }
                         Box {
                             var expandido by remember { mutableStateOf(false) }
@@ -422,34 +422,55 @@ fun MascotaScreen(navController: NavController, context: Context) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.4f)), // Fondo semitransparente
+                .background(Color.Black.copy(alpha = 0.4f)),
             contentAlignment = Alignment.Center
         ) {
             Card(
                 modifier = Modifier
                     .width(300.dp)
-                    .heightIn(min = 200.dp),
+                    .heightIn(min = 300.dp),
                 elevation = CardDefaults.cardElevation(8.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "Historial de Interacciones",
                         fontSize = 20.sp,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    // Mostrar cada mensaje en la lista de historial
+                    // Campo de búsqueda integrado
+                    var busqueda by remember { mutableStateOf("") }
+                    OutlinedTextField(
+                        value = busqueda,
+                        onValueChange = { busqueda = it },
+                        label = { Text("Buscar en historial") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Button(
+                        onClick = {
+                            val index = busquedaBinaria(historialInteracciones.sorted(), busqueda)
+                            busquedaResultado = if (index != -1) "Interacción encontrada: $busqueda" else "No se encontró la interacción"
+                        },
+                        modifier = Modifier.align(Alignment.End)
+                    ) {
+                        Text("Buscar")
+                    }
+                    Text(
+                        busquedaResultado,
+                        fontSize = 16.sp,
+                        color = Color.Red,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    // Lista de interacciones
                     historialInteracciones.forEach { mensaje ->
                         Text(
-                            text = mensaje,
+                            text = "- $mensaje",
                             fontSize = 16.sp,
                             modifier = Modifier.padding(vertical = 4.dp)
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                    // Botón para cerrar la Card
                     Button(
                         onClick = { mostrarHistorial = false },
                         modifier = Modifier.align(Alignment.End)
@@ -460,6 +481,7 @@ fun MascotaScreen(navController: NavController, context: Context) {
             }
         }
     }
+
 }
 
 

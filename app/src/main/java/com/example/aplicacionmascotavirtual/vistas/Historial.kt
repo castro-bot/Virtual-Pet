@@ -33,26 +33,5 @@ fun HistorialInteraccionesComponent(
     onTextoBusquedaChange: (String) -> Unit,
     busquedaResultado: String,
     onBuscar: () -> Unit
-) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("Historial de Interacciones:", fontSize = 20.sp, color = Color.White)
-        OutlinedTextField(
-            value = textoBusqueda,
-            onValueChange = onTextoBusquedaChange,
-            label = { Text("Buscar en historial") },
-            modifier = Modifier.fillMaxWidth(0.8f)
-        )
-        Button(onClick = onBuscar) {
-            Text("Buscar")
-        }
-        Text(
-            busquedaResultado,
-            fontSize = 16.sp,
-            color = Color.Red,
-            modifier = Modifier.padding(10.dp)
-        )
-        historial.forEach { accion ->
-            Text("- $accion", fontSize = 16.sp, color = Color.White)
-        }
-    }
-}
+) {}
+
