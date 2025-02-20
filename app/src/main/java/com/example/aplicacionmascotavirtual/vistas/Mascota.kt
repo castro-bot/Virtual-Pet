@@ -58,14 +58,11 @@ import androidx.navigation.NavController
 import com.example.aplicacionmascotavirtual.R
 import com.example.aplicacionmascotavirtual.componentes.BackgroundImage
 import com.example.aplicacionmascotavirtual.componentes.LogrosComponent
-import com.example.aplicacionmascotavirtual.viewmodel.MascotaViewModel
-import kotlinx.coroutines.delay
-
-import com.example.aplicacionmascotavirtual.componentes.LogrosComponent
 import com.example.aplicacionmascotavirtual.componentes.busquedaBinaria
 import com.example.aplicacionmascotavirtual.componentes.obtenerListaOrdenadaDeNecesidades
-import com.example.aplicacionmascotavirtual.models.Achievement
+import com.example.aplicacionmascotavirtual.viewmodel.MascotaViewModel
 import com.example.aplicacionmascotavirtual.vistas.DarAmorButton
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -141,12 +138,11 @@ fun MascotaScreen(navController: NavController, context: Context) {
                         IconButton(onClick = { navController.navigate("JuegoAdivinarVista") }) {
                             Icon(Icons.Default.Face, contentDescription = "Juego")
                         }
-                        // En la barra superior, junto a los otros IconButton
                         IconButton(
                             onClick = { navController.navigate("logros") }
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_trophy), // Necesitarás agregar este ícono
+                                painter = painterResource(id = R.drawable.ic_trophy),
                                 contentDescription = "Logros"
                             )
                         }
@@ -174,7 +170,6 @@ fun MascotaScreen(navController: NavController, context: Context) {
                             }
                         }
                     }
-
                     IconButton(
                         onClick = { navController.navigate("EleccionAnimal") }
                     ) {
@@ -449,7 +444,8 @@ fun MascotaScreen(navController: NavController, context: Context) {
                     Button(
                         onClick = {
                             val index = busquedaBinaria(historialInteracciones.sorted(), busqueda)
-                            busquedaResultado = if (index != -1) "Interacción encontrada: $busqueda" else "No se encontró la interacción"
+                            busquedaResultado =
+                                if (index != -1) "Interacción encontrada: $busqueda" else "No se encontró la interacción"
                         },
                         modifier = Modifier.align(Alignment.End)
                     ) {

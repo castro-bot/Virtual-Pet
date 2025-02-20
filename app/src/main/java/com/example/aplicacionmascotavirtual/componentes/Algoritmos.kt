@@ -18,9 +18,15 @@ fun busquedaBinaria(historial: List<String>, objetivo: String): Int {
 
 
 fun ordenarNecesidades(necesidades: MutableList<Pair<String, Int>>): MutableList<Pair<String, Int>> {
-    return necesidades.sortedBy { it.second }.toMutableList()
-}
+    if (necesidades.size <= 1) return necesidades // Caso base: lista de 0 o 1 elemento ya está ordenada
 
+    val pivote = necesidades[necesidades.size / 2] // Se elige un pivote (el del medio)
+    val menores = necesidades.filter { it.second < pivote.second }.toMutableList()
+    val iguales = necesidades.filter { it.second == pivote.second }.toMutableList()
+    val mayores = necesidades.filter { it.second > pivote.second }.toMutableList()
+
+    return (ordenarNecesidades(menores) + iguales + ordenarNecesidades(mayores)).toMutableList()
+}
 
 fun obtenerListaOrdenadaDeNecesidades(mascota: Mascota): List<Pair<String, Int>> {
     val necesidades = mutableListOf(
