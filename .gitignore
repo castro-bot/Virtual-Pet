@@ -31,3 +31,6 @@ key.properties
 
 # Secret folders
 .secrets/
+# .gitignore
+google-services.json
+*.plist
