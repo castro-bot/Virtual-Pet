@@ -13,3 +13,21 @@
 .externalNativeBuild
 .cxx
 local.properties
+.idea/
+*.log
+*.apk
+*.ap_
+gradle-wrapper.properties.lock
+# Android signing keys
+*.jks
+*.keystore
+
+# Optional: if you store keystore config in a separate file
+key.properties
+
+# If you use .env or other secret config
+.env
+.env.local
+
+# Secret folders
+.secrets/
