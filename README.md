@@ -39,15 +39,11 @@ To get a local copy up and running, follow these simple steps.
     ```sh
     git clone https://github.com/castro-bot/Virtual-Pet.git
     ```
-2.  **Open in Android Studio:**
-    - Open Android Studio.
-    - Select "Open an existing project".
-    - Navigate to the cloned repository folder and open it.
-3.  **Sync Gradle:**
+2.  **Open in Android Studio & Sync Gradle:**
     - Android Studio should automatically start syncing the Gradle project. If not, click the "Sync Project with Gradle Files" button in the toolbar.
-4.  **Set up Firebase:**
+3.  **Set up Firebase:**
     - The project includes a `google-services.json` file. To connect to your own Firebase backend, replace this file with the one from your own Firebase project configuration.
-5.  **Run the application:**
+4.  **Run the application:**
     - Select a run configuration (usually `app`).
     - Choose a target device (emulator or physical device).
     - Click the "Run" button.
