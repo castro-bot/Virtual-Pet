@@ -79,3 +79,12 @@ The project follows a standard Android application structure:
 ├── gradle/             # Gradle wrapper files
 └── build.gradle.kts    # Top-level build script
 ```
+
+## ✍️ Authors
+
+This app was created with ❤️ by:
+
+- Adolfo Castro 🎷
+- Axel Hernández 🥋
+- Paula Márquez ❤️
+- Leonela Sornoza 🎹
