@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
     id("kotlin-kapt")
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -42,9 +43,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -78,13 +76,11 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
-    val room_version = "2.6.1"
+    val room_version = "2.8.4"
 
     implementation("androidx.room:room-runtime:$room_version")
 
     kapt("androidx.room:room-compiler:$room_version")
-
-    annotationProcessor("androidx.room:room-compiler:$room_version")
 
     implementation("androidx.room:room-ktx:$room_version")
 
