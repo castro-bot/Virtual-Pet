@@ -33,4 +33,5 @@ key.properties
 .secrets/
 
 google-services.json
+app/google-services.json
 *.plist

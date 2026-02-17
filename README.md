@@ -42,7 +42,9 @@ To get a local copy up and running, follow these simple steps.
 2.  **Open in Android Studio & Sync Gradle:**
     - Android Studio should automatically start syncing the Gradle project. If not, click the "Sync Project with Gradle Files" button in the toolbar.
 3.  **Set up Firebase:**
-    - The project includes a `google-services.json` file. To connect to your own Firebase backend, replace this file with the one from your own Firebase project configuration.
+    - Copy `app/google-services.json.example` to `app/google-services.json`.
+    - Replace the placeholder values with your Firebase Android app config from the Firebase Console.
+    - Do not commit `app/google-services.json` to git.
 4.  **Run the application:**
     - Select a run configuration (usually `app`).
     - Choose a target device (emulator or physical device).
